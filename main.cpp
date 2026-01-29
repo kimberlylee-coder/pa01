@@ -1,4 +1,4 @@
-// Feb 14: This file should implement the game using a custom implementation of a BST (that is based on your implementation from lab02)
+// This file should implement the game using a custom implementation of a BST (based on your earlier BST implementation)
 #include <iostream>
 #include <fstream>
 #include <string>

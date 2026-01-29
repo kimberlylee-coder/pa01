@@ -1,4 +1,4 @@
-// Feb 14: This file should implement the game using the std::set container class
+// This file should implement the game using the std::set container class
 // Do not include card_list.h in this file
 #include <iostream>
 #include <fstream>
