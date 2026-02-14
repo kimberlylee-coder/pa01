@@ -4,6 +4,7 @@
 #include <string>
 #include "card.h"
 #include "card_list.h"
+
 //Do not include set in this file
 
 using namespace std;
@@ -24,17 +25,39 @@ int main(int argv, char** argc){
   }
 
   //Read each file
+
+  CardBST alice_cards;
+  CardBST bob_cards;
+  
+
   while (getline (cardFile1, line) && (line.length() > 0)){
+    char suit=line[0];
+    string value=line.substr(2);
+    Card c(suit,value);
+    alice_cards.insert(c);
 
   }
   cardFile1.close();
 
 
   while (getline (cardFile2, line) && (line.length() > 0)){
-
+    char suit=line[0];
+    string value=line.substr(2);
+    Card c(suit,value);
+    bob_cards.insert(c);
   }
   cardFile2.close();
   
+  playGame(alice_cards,bob_cards);
+
+  cout << endl << "Alice's cards:" << endl;
+  for(const auto& cards : alice_cards){
+    cout << cards << endl;
+  }
   
+  cout << endl << "Bob's cards:" << endl;
+  for(const auto& cards : bob_cards){
+    cout << cards << endl;
+  }
   return 0;
 }
