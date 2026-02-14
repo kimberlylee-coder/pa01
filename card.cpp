@@ -98,7 +98,7 @@ bool Card::operator==(const Card& other) const{
     if(this->rank!=other.rank){
         return false;
     }
-    return false;
+    return true;
    
 }
 

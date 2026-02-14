@@ -16,12 +16,12 @@ CardBST::~CardBST(){
 
 
 void CardBST::clear(Node *n) {
-if(n==nullptr){
-    return;
-}
-clear(n->left);
-clear(n->right);
-delete n;
+    if(n==nullptr){
+        return;
+    }
+    clear(n->left);
+    clear(n->right);
+    delete n;
 }
 
 
@@ -54,6 +54,7 @@ bool CardBST::insert(const Card& c, Node* n){
         }
         return insert(c,n->right);
     }
+
 }
 
 
@@ -149,7 +150,17 @@ void CardBST::printInOrder(Node* n) const{
    printInOrder(n->right);
 }
 
+const Card& CardBST::Iterator::operator*() const {
+    return curr->card;
+}
 
+bool CardBST::Iterator::operator==(const Iterator& other) const{
+    return curr==other.curr;
+}
+
+bool CardBST::Iterator::operator!=(const Iterator& other) const{
+    return !(*this==other);
+}
 
 CardBST::Iterator& CardBST::Iterator::operator++(){
    if(curr==nullptr){
@@ -165,11 +176,11 @@ CardBST::Iterator& CardBST::Iterator::operator++(){
    
    }
    else{
-        Node* p=curr->parent;
+    Node* p=curr->parent;
         while(p != nullptr && curr==p->right){
-    curr=p;
-    p=p->parent;
-   }
+            curr=p;
+            p=p->parent;
+    }
    curr=p;
 
    }
