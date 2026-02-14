@@ -1,81 +1,111 @@
 #include "card_list.h"
 #include "card.h"
 #include <iostream>
-#include <string>
+#include <cassert>
+#include <vector>
 
 using namespace std;
 
-int getTest();
+
+void verifySequence(CardBST& bst, vector<Card> expected) {
+    size_t i = 0;
+    for (auto it = bst.begin(); it != bst.end(); ++it) {
+        assert(*it == expected[i++]);
+    }
+    assert(i == expected.size());
+}
 
 int main() {
-    CardBST bst1, bst2;
+    //bst tests
+    cout << "Testing BST Methods..." << endl;
+    CardBST t;
+    Card c1('c', "3"), c2('d', "j"), c3('s', "10"), c4('h', "a"), c5('s', "5");
+
+    //empty tree contains
+    assert(t.contains(c1) == false);
+
+   //single node insert/contains
+    t.insert(c1);
+    assert(t.contains(c1) == true);
+
+    //multiple node ordering
+    t.insert(c2); 
+    t.insert(c3); 
+    t.insert(c4);
+   
+    verifySequence(t, {c1, c2, c3, c4});
+
+    //edge case
+    assert(t.insert(c1) == false);
+
+    //memory management and removal
+    t.remove(c4); 
+    assert(!t.contains(c4));
+    t.remove(c1); 
+    assert(!t.contains(c1));
+    
+    //edge case
+    assert(t.remove(c5) == false); 
+
+    //iterator tests
+    cout << "Testing Iterator Methods..." << endl;
+    CardBST itTree;
+    Card a('c', "2"), b('d', "4"), c('s', "6");
+
+    //empty tree
+    assert(itTree.begin() == itTree.end());
+    assert(itTree.rbegin() == itTree.rend());
+
+    //single node
+    itTree.insert(b);
+    auto it = itTree.begin();
+    assert(*it == b);
+    assert(++it == itTree.end());
+
+    //multiple nodes
+    itTree.insert(a); itTree.insert(c);
+    auto itF = itTree.begin();
+    assert(*itF == a); 
+    ++itF;
+    assert(*itF == b); 
+    ++itF;
+    assert(*itF == c);
+
+    //Incrementing past the end and decrementing past the reverse end
+    auto itR = itTree.rbegin();
+    assert(*itR == c); --itR;
+    assert(*itR == b); --itR;
+    assert(*itR == a);
+
+    //iterator comparison
+    auto it1 = itTree.begin();
+    auto it2 = itTree.begin();
+    assert(it1 == it2);
+    assert(!(it1 != it2));
+    ++it2;
+    assert(it1 != it2);
 
    
-    bst1.insert(Card('s', "10"));
-    bst1.insert(Card('h', "a"));
-    bst1.insert(Card('c', "3"));
-    bst1.insert(Card('d', "j"));
-    bst1.insert(Card('s', "5"));
+    //playgame
+    cout << "Testing PlayGame Logic..." << endl;
 
-    bool all=true;
-    int testnum=getTest();
-    if(testnum){
-        all=false;
-    }
+    //common cards
+    CardBST p1, p2;
+    p1.insert(c3); p2.insert(c3);
+    playGame(p1, p2);
+    assert(!p1.contains(c3) && !p2.contains(c3));
 
+    //no common hands
+    p1.insert(Card('h', "k"));
+    p2.insert(Card('c', "2"));
+    playGame(p1, p2);
+    assert(p1.contains(Card('h', "k")));
 
-    if(all || testnum == 1){
-        cout << "  in-order: " << endl;
-        bst1.printInOrder();
-        cout << endl;
-    }
-
-    if(all || testnum == 2){
-        cout << "  contains s 10? " << (bst1.contains(Card('s', "10")) ? "Y" : "N") << endl;
-        cout << "  contains h 3? " << (bst1.contains(Card('h', "3")) ? "Y" : "N") << endl;
-    }
-
-
-    if(all || testnum == 3){
-        cout << "  removing s 10..." << endl;
-        bst1.remove(Card('s', "10"));
-        cout << "  contains s 10 now? " << (bst1.contains(Card('s', "10")) ? "Y" : "N") << endl;
-        cout << "  new in-order: " << endl;
-        bst1.printInOrder();
-    }
-
- 
-    if(all || testnum == 4){
-        cout << "  Testing Iterator Forward: " << endl;
-        for (auto it = bst1.begin(); it != bst1.end(); ++it) {
-            cout << "  " << *it << endl;
-        }
-    }
-
-
-    if(all || testnum == 5){
-        CardBST alice, bob;
-        alice.insert(Card('s', "a"));
-        alice.insert(Card('h', "k"));
-        bob.insert(Card('s', "a"));
-        
-        cout << "  Testing playGame logic..." << endl;
-        playGame(alice, bob);
-        cout << "  Alice contains s a? " << (alice.contains(Card('s', "a")) ? "Y" : "N") << endl;
-    }
-
+    //one empty hand
+    CardBST empty;
+    playGame(p1, empty); 
+    
+    cout << "\n>> ALL MANDATORY SCENARIOS PASSED <<" << endl;
     return 0;
 }
 
-int getTest(){
-    cout << "Choice of tests:\n"
-         << "  0. all tests\n"
-         << "  1. printInOrder\n"
-         << "  2. contains\n"
-         << "  3. remove\n"
-         << "  4. iterators\n"
-         << "  5. playGame\n";
-    int choice;
-    cin >> choice;
-    return choice;
-}
