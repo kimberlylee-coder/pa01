@@ -261,9 +261,9 @@ void playGame(CardBST& alice, CardBST& bob){
 
 
     
-    bool matchFoundRound=true;
-    while(matchFoundRound){
-        matchFoundRound=false;
+    bool matchFound=true;
+    while(matchFound){
+        matchFound=false;
 
         bool aliceFound=false;
         Card matchAlice(' ',"");
@@ -279,12 +279,12 @@ void playGame(CardBST& alice, CardBST& bob){
     cout << "Alice picked matching card " << matchAlice << endl;
     alice.remove(matchAlice);
     bob.remove(matchAlice);
-    matchFoundRound=true;
+    matchFound=true;
   }
 
   bool bobFound=false;
   Card matchBob(' ', "");
-  for(auto it=bob.rbegin();it!=bob.rend() && !bobFound; ++it){
+  for(auto it=bob.rbegin();it!=bob.rend() && !bobFound; --it){
       if(alice.contains(*it)){
         matchBob=*it;
         bobFound=true;
@@ -296,7 +296,7 @@ void playGame(CardBST& alice, CardBST& bob){
     cout << "Bob picked matching card " << matchBob << endl;
     alice.remove(matchBob);
     bob.remove(matchBob);
-     matchFoundRound=true;
+     matchFound=true;
   }
  
 
